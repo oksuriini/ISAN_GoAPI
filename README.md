@@ -6,9 +6,8 @@ ISAN API written with golang.
 
 Below simple structure for SQL database.
 
-+-------------------+--------------+------+-----+---------+-------+
 | Field             | Type         | Null | Key | Default | Extra |
-+-------------------+--------------+------+-----+---------+-------+
+| ----------- | -----------|-----------|-----------|-----------|-----------|
 | record_type       | text         | YES  |     | NULL    |       |
 | title             | text         | YES  |     | NULL    |       |
 | work_type         | text         | YES  |     | NULL    |       |
@@ -17,7 +16,7 @@ Below simple structure for SQL database.
 | duration_min      | int          | YES  |     | NULL    |       |
 | original_language | text         | YES  |     | NULL    |       |
 | isan              | varchar(255) | NO   | PRI | NULL    |       |
-+-------------------+--------------+------+-----+---------+-------+
+
 
 ## Handlers
 
