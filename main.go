@@ -7,19 +7,16 @@ import (
 
 func main() {
 
-	//dbb, err := queries.CreateDBstruct("", ":3306")
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	//
-	//isans, err := dbb.GetAll()
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	//
-	//fmt.Println(isans)
+	dbb, err := queries.CreateDBstruct("", ":3306")
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	d := queries.Database{}
+	isans, err := dbb.GetRowsByFilter("work_typ", "120")
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	fmt.Println(d.GetRowsByFilter("lol", "arvo"))
+	fmt.Println(isans)
+
 }
