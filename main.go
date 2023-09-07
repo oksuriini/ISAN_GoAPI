@@ -1,6 +1,9 @@
 package main
 
-// mariadb -h 127.0.0.1 -u root -ppassw0rd
+import (
+	"ISAN-api/queries"
+	"fmt"
+)
 
 func main() {
 
@@ -16,4 +19,7 @@ func main() {
 	//
 	//fmt.Println(isans)
 
+	d := queries.Database{}
+
+	fmt.Println(d.GetRowsByFilter("lol", "arvo"))
 }

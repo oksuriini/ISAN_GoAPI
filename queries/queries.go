@@ -6,17 +6,20 @@ import (
 	"errors"
 	"fmt"
 
+	// mysql driver imported
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// Database struct is meant to hold sql.DB struct, address of the database Addr, and port number Port.
 type Database struct {
 	db   *sql.DB
 	Addr string
 	Port string
 }
 
-//mariadb -h 127.0.0.1 -u root -ppassw0rd
-
+// Function creates Database struct based on given arguments.
+// Function has two parameters 'addr' and 'port', where addr designates the address of sql server
+// and port designates the port to be used.
 func CreateDBstruct(addr string, port string) (*Database, error) {
 	newdb, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", "root", "passw0rd", addr, "api"))
 	if err != nil {
@@ -32,6 +35,8 @@ func CreateDBstruct(addr string, port string) (*Database, error) {
 	return &newD, nil
 }
 
+// Function's purpose is to validate parameter 'field'.
+// Used to validate SQL query
 func ValidateField(field string) bool {
 	switch field {
 	case "record_type", "title", "work_type", "release_date", "director", "duration_min", "original_language", "isan":
@@ -41,7 +46,10 @@ func ValidateField(field string) bool {
 	}
 }
 
-func (d *Database) GetRows(field, value string) ([]isan.ISAN, error) {
+// Function accepts parameters 'field' and 'value', where 'field' is the field in SQL
+// database, and 'value' is the value of that field.
+// eg. GetRowsByFilter("duration_min", "120") will return all rows, where duration_min value is 120.
+func (d *Database) GetRowsByFilter(field, value string) ([]isan.ISAN, error) {
 	var rowsISAN []isan.ISAN
 
 	if !ValidateField(field) {
@@ -53,7 +61,7 @@ func (d *Database) GetRows(field, value string) ([]isan.ISAN, error) {
 }
 
 // Get all fetches all of the rows, and returns an array of isan.ISAN struct.
-// TODOMORE
+// This function is here for development/testing/development purposes.
 func (d *Database) GetAll() ([]isan.ISAN, error) {
 	var allISAN []isan.ISAN
 
@@ -87,6 +95,8 @@ func (d *Database) GetAll() ([]isan.ISAN, error) {
 	return allISAN, nil
 }
 
+// Function to insert ISAN record into database.
+// PLACEHOLDER TODO LATER
 func (d *Database) InsertISAN(isan string) (int, error) {
 	return 1, nil
 }
