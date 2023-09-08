@@ -1,6 +1,7 @@
 package main
 
 import (
+	"ISAN-api/api"
 	"ISAN-api/queries"
 	"fmt"
 )
@@ -12,11 +13,8 @@ func main() {
 		fmt.Println(err)
 	}
 
-	isans, err := dbb.GetRowsByFilter("work_typ", "120")
-	if err != nil {
-		fmt.Println(err)
-	}
+	serv := api.CreateApi("127.0.0.1", ":8080", dbb)
 
-	fmt.Println(isans)
+	serv.Server.ListenAndServe()
 
 }
