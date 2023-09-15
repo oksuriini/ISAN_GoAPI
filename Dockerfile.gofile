@@ -12,8 +12,9 @@ COPY /go.sum /go/src/ISAN-api
 
 RUN go build -C /go/src/ISAN-api/ -o /temp/frank
 
-EXPOSE 22
 EXPOSE 8080
-
+EXPOSE 3306
 
 ENTRYPOINT [ "/temp/frank" ]
+
+## docker run -d -p 8080:8080 goapi:latest

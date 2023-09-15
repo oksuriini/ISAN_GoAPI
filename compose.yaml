@@ -1,0 +1,11 @@
+services:
+  app:
+    image: goapi:latest
+    ports:
+      - "8080:8080"
+    working_dir: /
+    network_mode: "host"
+  mysql:
+    image: custmysql:latest
+    ports:
+      - "3306:3306"

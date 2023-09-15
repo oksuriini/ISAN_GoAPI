@@ -1,0 +1,20 @@
+FROM mysql:latest
+
+ENV MYSQL_ROOT_PASSWORD=passw0rd
+ENV MYSQL_DATABASE=api
+
+# Oneliner for db dumping
+# create table isan( record_type TEXT NOT NULL, title TEXT NOT NULL, work_type TEXT NOT NULL, release_date DATE NOT NULL, director TEXT, duration_min int NOT NULL, original_language TEXT, isan_num varchar(255) NOT NULL PRIMARY KEY );
+
+# Oneliner for inserting test data for db
+# INSERT INTO isan(record_type, title, work_type, release_date, director, duration_min, original_language, isan_num) VALUES ("test_record_type", "test_title", "test_work_type", CURRENT_TIMESTAMP, "test_director", 120, "test_language", "TEST_ISAN_NUM");
+COPY ./apiisan.sql ./apiisan.sql
+
+COPY ./dockerinit.sh ./docker-entrypoint-initdb.d/dockerinit.sh
+# RUN mysqldump -u root -p$MYSQL_ROOT_PASSWORD --databases api isan > apiisan.sql
+
+# Run this file with:
+# docker run -d -p 3306:3306 custmysql:latest
+# access with:
+# docker exec -ti <container_name> bash
+# mysql -u root -p$MYSQL_ROOT_PASSWORD

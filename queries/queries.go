@@ -25,6 +25,10 @@ func CreateDBstruct(addr string, port string) (*Database, error) {
 
 	// Create sql.DB connection and later pipeline it to isan.Database struct
 	newdb, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", "root", "passw0rd", addr, "api"))
+
+	// Debugging purposes
+	fmt.Println(fmt.Sprintf("%s:%s@tcp(%s)/%s", "root", "passw0rd", addr, "api"))
+
 	if err != nil {
 		return nil, err
 	}
@@ -41,33 +45,36 @@ func CreateDBstruct(addr string, port string) (*Database, error) {
 
 // Function's purpose is to validate parameter 'field'.
 // Used to validate SQL query
-func ValidateField(field string) bool {
+func (d *Database) ValidateField(field string) bool {
 	switch field {
-	case "record_type", "title", "work_type", "release_date", "director", "duration_min", "original_language", "isan":
+	case "record_type", "title", "work_type", "release_date", "director", "duration_min", "original_language", "isan_num":
 		return true
 	default:
 		return false
 	}
 }
 
+// Function takes in argument of type string, which is used to filter out results based on given argument.
+// Function returns a string which is used to make SQL query to the database.
+// Currently function does additional validation by accepting only specific strings as the value of field, which is a bit redundant, so it will later be removed.
 func SelectFieldString(field string) string {
 	switch field {
 	case "record_type":
-		return fmt.Sprintf("SELECT isan, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
+		return fmt.Sprintf("SELECT isan_num, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
 	case "title":
-		return fmt.Sprintf("SELECT isan, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
+		return fmt.Sprintf("SELECT isan_num, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
 	case "work_type":
-		return fmt.Sprintf("SELECT isan, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
+		return fmt.Sprintf("SELECT isan_num, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
 	case "release_date":
-		return fmt.Sprintf("SELECT isan, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
+		return fmt.Sprintf("SELECT isan_num, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
 	case "director":
-		return fmt.Sprintf("SELECT isan, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
+		return fmt.Sprintf("SELECT isan_num, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
 	case "duration_min":
-		return fmt.Sprintf("SELECT isan, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
+		return fmt.Sprintf("SELECT isan_num, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
 	case "original_language":
-		return fmt.Sprintf("SELECT isan, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
+		return fmt.Sprintf("SELECT isan_num, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
 	case "isan":
-		return fmt.Sprintf("SELECT isan, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
+		return fmt.Sprintf("SELECT isan_num, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE %s=?", field)
 	default:
 		return ""
 	}
@@ -80,7 +87,7 @@ func SelectFieldString(field string) string {
 func (d *Database) GetRowsByFilter(field, value string) ([]isan.ISAN, error) {
 	var rowsISAN []isan.ISAN
 
-	if !ValidateField(field) {
+	if !d.ValidateField(field) {
 		err := errors.New(fmt.Sprintf("Field validation failed. Field %s does not exists.\n", field))
 		return nil, err
 	}
@@ -91,7 +98,7 @@ func (d *Database) GetRowsByFilter(field, value string) ([]isan.ISAN, error) {
 		return nil, err
 	}
 
-	rows, err := d.db.Query("SELECT isan, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE duration_min=?", value)
+	rows, err := d.db.Query("SELECT isan_num, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE duration_min=?", value)
 	if err != nil {
 		fmt.Println("Something unexpected happened in db query.")
 		fmt.Println("Field: " + field + ", Value: " + value)
@@ -126,7 +133,7 @@ func (d *Database) GetRowsByFilter(field, value string) ([]isan.ISAN, error) {
 func (d *Database) GetAll() ([]isan.ISAN, error) {
 	var allISAN []isan.ISAN
 
-	rows, err := d.db.Query("SELECT isan, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan")
+	rows, err := d.db.Query("SELECT isan_num, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan")
 	if err != nil {
 		return nil, err
 	}
