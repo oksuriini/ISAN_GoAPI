@@ -1,11 +1,11 @@
 services:
   app:
-    image: goapi:latest
+    image: oksuriini/goapi-app
     ports:
       - "8080:8080"
     working_dir: /
     network_mode: "host"
   mysql:
-    image: custmysql:latest
+    image: oksuriini/goapi-mysqldb
     ports:
       - "3306:3306"
