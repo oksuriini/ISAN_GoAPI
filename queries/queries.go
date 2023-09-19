@@ -165,6 +165,20 @@ func (d *Database) GetAll() ([]isan.ISAN, error) {
 
 // Function to insert ISAN record into database.
 // PLACEHOLDER TODO LATER
-func (d *Database) InsertISAN(isan string) (int, error) {
-	return 1, nil
+func (d *Database) InsertISAN(isan isan.ISAN) (int, error) {
+	is, rt, ti, wt, rd, di, dm, ol := isan.GetIsanVals()
+
+	query := "INSERT INTO `isan` (`isan_num`, `record_type`, `title`, `work_type`, `release_date`, `director`, `duration_min`, `original_language`) VALUES(?,?,?,?,?,?,?,?)"
+
+	result, err := d.db.Exec(query, is, rt, ti, wt, rd, di, dm, ol)
+	if err != nil {
+		return 0, err
+	}
+
+	resvar, err := result.RowsAffected()
+	if err != nil {
+		return 0, nil
+	}
+
+	return int(resvar), nil
 }

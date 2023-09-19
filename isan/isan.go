@@ -28,3 +28,16 @@ func CreateNewISAN(isan_num string, recordtype string,
 
 	return newisan
 }
+
+func (i *ISAN) GetIsanVals() (isan_num, record_type, title, work_type, release_date, director, duration_min, original_language string) {
+	isan_num = i.isan
+	record_type = i.recordType
+	title = i.title
+	work_type = i.workType
+	release_date = i.releaseDate
+	director = i.director
+	duration_min = i.durationMin
+	original_language = i.originalLang
+
+	return
+}

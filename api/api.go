@@ -1,6 +1,7 @@
 package api
 
 import (
+	"ISAN-api/isan"
 	"ISAN-api/queries"
 	"fmt"
 	"log"
@@ -41,13 +42,13 @@ func (a *Api) registerHandlers() {
 
 	a.mux.HandleFunc("/test", a.testHandler)
 	a.mux.HandleFunc("/api/v1/all", a.getAll)
+	a.mux.HandleFunc("/api/v1/insertTest", a.insertTest)
 	a.Server.Handler = &a.mux
 }
 
 func (a *Api) testHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Testing works"))
 	fmt.Println("Testing handler works")
-	return
 }
 
 func (a *Api) getAll(w http.ResponseWriter, r *http.Request) {
@@ -57,4 +58,15 @@ func (a *Api) getAll(w http.ResponseWriter, r *http.Request) {
 		a.errlog.Fatalf("Error: %s\n", err)
 	}
 	w.Write([]byte(fmt.Sprintln(isanRecords)))
+}
+
+func (a *Api) insertTest(w http.ResponseWriter, r *http.Request) {
+	isantest := isan.CreateNewISAN("12345Insert", "workInsert", "idunnoInsert", "releaseInsert", "2019-05-05", "dunnoInsert", "100", "langInsert")
+
+	res, err := a.db.InsertISAN(isantest)
+	if err != nil {
+		a.errlog.Println("Error inserting into database")
+		a.errlog.Fatalf("Error: %s\n", err)
+	}
+	w.Write([]byte(fmt.Sprintf("Inserted value %v\n Response: %d", isantest, res)))
 }

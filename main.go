@@ -16,5 +16,4 @@ func main() {
 	serv := api.CreateApi("127.0.0.1", ":8080", dbb)
 
 	serv.Server.ListenAndServe()
-
 }
