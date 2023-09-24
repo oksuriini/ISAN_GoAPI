@@ -43,6 +43,7 @@ func (a *Api) registerHandlers() {
 	a.mux.HandleFunc("/test", a.testHandler)
 	a.mux.HandleFunc("/api/v1/all", a.getAll)
 	a.mux.HandleFunc("/api/v1/insertTest", a.insertTest)
+	a.mux.HandleFunc("/api/v1/get/", a.getByFilter)
 	a.Server.Handler = &a.mux
 }
 
@@ -69,4 +70,28 @@ func (a *Api) insertTest(w http.ResponseWriter, r *http.Request) {
 		a.errlog.Fatalf("Error: %s\n", err)
 	}
 	w.Write([]byte(fmt.Sprintf("Inserted value %v\n Response: %d", isantest, res)))
+}
+
+func (a *Api) getByFilter(w http.ResponseWriter, r *http.Request) {
+	filter := r.URL.Query().Get("filter")
+	if filter == "" {
+		a.log.Println("No filter found.")
+		return
+	}
+	value := r.URL.Query().Get("value")
+	if value == "" {
+		a.log.Println("No value set for filter.")
+		return
+	}
+
+	isans, err := a.db.GetRowsByFilter(filter, value)
+	if err != nil {
+		a.log.Fatalln(err)
+		return
+	}
+
+	fmt.Println(filter)
+	fmt.Println(value)
+
+	fmt.Println(isans)
 }

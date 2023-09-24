@@ -98,7 +98,7 @@ func (d *Database) GetRowsByFilter(field, value string) ([]isan.ISAN, error) {
 		return nil, err
 	}
 
-	rows, err := d.db.Query("SELECT isan_num, record_type, title, work_type, release_date, director, duration_min, original_language FROM isan WHERE duration_min=?", value)
+	rows, err := d.db.Query(fieldString, value)
 	if err != nil {
 		fmt.Println("Something unexpected happened in db query.")
 		fmt.Println("Field: " + field + ", Value: " + value)
@@ -128,6 +128,7 @@ func (d *Database) GetRowsByFilter(field, value string) ([]isan.ISAN, error) {
 	return rowsISAN, nil
 }
 
+// WORKING FUNCTION
 // Get all fetches all of the rows, and returns an array of isan.ISAN struct.
 // This function is here for development/testing/development purposes.
 func (d *Database) GetAll() ([]isan.ISAN, error) {
@@ -163,8 +164,8 @@ func (d *Database) GetAll() ([]isan.ISAN, error) {
 	return allISAN, nil
 }
 
+// WORKING FUNCTION
 // Function to insert ISAN record into database.
-// PLACEHOLDER TODO LATER
 func (d *Database) InsertISAN(isan isan.ISAN) (int, error) {
 	is, rt, ti, wt, rd, di, dm, ol := isan.GetIsanVals()
 
